@@ -39,9 +39,6 @@ export default {
         data: {
             type: Array
         },
-        Result: {
-            type: Array
-        },
         ['keyword']: String,
         ['ishow']: Boolean
     },
@@ -53,9 +50,6 @@ export default {
         },
         NewData(){
             this.AllData = this.data
-        },
-        Data(){
-            this.searchData()
         },
         VerifySelected(){
             this.AllData = this.AllData

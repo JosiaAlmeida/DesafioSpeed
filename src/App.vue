@@ -1,80 +1,81 @@
 <template>
-    <div>
-      <form >
-        <input class="search" type="text" v-model="keyword"
-            @change="searchData"
-            placeholder="Digite aqui...">
-        <div >
-            <Slug :keyword= keyword :ishow= show :data= AllData :Result= Result />
+<div>
+    <form>
+        <input class="search" type="text" v-model="keyword" @change="searchData" placeholder="Digite aqui...">
+        <div>
+            <Slug :keyword=keyword :ishow=show :data=AllData />
         </div>
-      </form>
-    </div>
+    </form>
+</div>
 </template>
 
 <script>
 import Axios from './service/axios'
 import Slug from './components/slug/Slug'
 export default {
-  name: 'Form',
-  components:{
-      Slug
-  },
-  data() {
-    return{
-      show: false,
-      keyword: null,
-      AllData: [],
-      Result:[],
-      state: false,
-    }
-  },
-  methods:{
-    setData(){
-      Axios.get("/api/v3/filters.json").then(res=> {
-        let filters = res.data.filters.map(x=> x.filters.filter(x=> x.groupTag == "setores e cnaes"
-          || x.groupTag == "estados"
-          || x.groupTag == "municipio" ).pop())
-        let filterOptions = filters
-        this.ReducerElementArray(filterOptions)
-        let data=[]
-        filterOptions.map(x=> data.push(x.filterOptions))
-        data.map(x=> x.slice(0,7).map(x=> this.AllData.push({...x,bool:false})))
-      }).catch(err=> console.log("Ocorreu um erro "+ err))
+    name: 'Form',
+    components: {
+        Slug
     },
-    ReducerElementArray(value){
-      var i = 0;
-      while (i < value.length) {
-        if (value[i] === undefined) {
-          value.splice(i, 1);
-        } 
-        else {
-          ++i;
+    data() {
+        return {
+            show: false,
+            keyword: null,
+            AllData: [],
+            state: false,
         }
-      }
     },
-    searchData(){
-      if(this.keyword){
-        this.show = true
-        this.Result = this.AllData.filter(x=> x.label.includes(this.keyword)|| x.subline.includes(this.keyword))
-      }else this.show = false
+    methods: {
+        setData() {
+            Axios.get("/api/v3/filters.json").then(res => {
+                let filters = res.data.filters.map(x => x.filters.filter(x => x.groupTag == "setores e cnaes" ||
+                    x.groupTag == "estados" ||
+                    x.groupTag == "municipio").pop())
+                let filterOptions = filters
+                this.ReducerElementArray(filterOptions)
+                let data = []
+                filterOptions.map(x => data.push(x.filterOptions))
+                data.map(x => x.slice(0, 7).map(x => this.AllData.push({
+                    ...x,
+                    bool: false
+                })))
+            }).catch(err => console.log("Ocorreu um erro " + err))
+        },
+        ReducerElementArray(value) {
+            var i = 0;
+            while (i < value.length) {
+                if (value[i] === undefined) {
+                    value.splice(i, 1);
+                } else {
+                    ++i;
+                }
+            }
+        },
+        searchData() {
+            if (this.keyword) 
+              this.show = true 
+            else this.show = false
+        },
+        TransformText(text) {
+            return text.normalize("NFD").replace(/[^a-zA-Zs]/g, "").toLowerCase()
+        },
     },
-    TransformText(text){
-      return text.normalize("NFD").replace(/[^a-zA-Zs]/g, "").toLowerCase()
-    },
-  },
-  mounted(){
-    this.setData()
-  }
+    mounted() {
+        this.setData()
+    }
 }
 </script>
+
 <style scoped>
-.search{
+.search {
     width: 100%;
     font-size: 20px;
     border: none;
     border-bottom: 1px solid rgb(39, 39, 126);
 }
-.search:active, .search:focus{
+
+.search:active,
+.search:focus {
     box-shadow: 0;
     outline: 0;
     border: 0 none;
