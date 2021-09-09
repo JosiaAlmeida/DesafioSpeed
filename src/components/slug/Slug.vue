@@ -58,7 +58,12 @@ export default {
             this.Save()
         },
         searchData(){
-            this.AllResult =this.keyword ? this.AllData.filter(x=>this.TransformText(x.label).includes(this.TransformText(this.keyword))|| this.TransformText(x.subline).includes(this.TransformText(this.keyword))): []
+            this.AllResult =this.keyword ? 
+                this.AllData.filter(
+                    x=>this.TransformText(x.label).includes(this.TransformText(this.keyword))
+                    || this.TransformText(x.subline).includes(this.TransformText(this.keyword))
+                    || this.TransformText(x.subline) == this.TransformText(this.keyword)
+                    || this.TransformText(x.label) == this.TransformText(this.keyword)): []
         },
         TransformText(text){
             return text.normalize("NFD").replace(/[^a-zA-Zs]/g, "").toLowerCase()
