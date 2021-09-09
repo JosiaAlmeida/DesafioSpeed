@@ -1,7 +1,7 @@
 <template>
 <div>
     <form>
-        <input class="search" type="text" v-model="keyword" @change="searchData" placeholder="Digite aqui...">
+        <input class="search" @keydown.enter.stop.prevent type="text" v-model="keyword" placeholder="Digite aqui...">
         <div>
             <Slug :keyword=keyword :ishow=show :data=AllData />
         </div>
@@ -62,6 +62,9 @@ export default {
     },
     mounted() {
         this.setData()
+    },
+    beforeUpdate(){
+        this.searchData()
     }
 }
 </script>
